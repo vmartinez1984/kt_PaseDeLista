@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.MenuActivity">
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="132dp"
+        android:onClick="tomarSelfie"
+        android:text="Tomar selfie"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:layout_editor_absoluteX="62dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="287dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="28dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Registro"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="57dp" />
+
+    <Button
+        android:id="@+id/buttonRegistrarAsistencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:enabled="false"
+        android:onClick="registrarAsistencia"
+        android:text="Registrar asistencia"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        tools:layout_editor_absoluteX="57dp" />
+
+    <TextView
+        android:id="@+id/textViewIntruccion"
+        android:layout_width="293dp"
+        android:layout_height="69dp"
+        android:layout_marginTop="32dp"
+        android:text="Para registrar su entrada tome una selfie presionando el botón [Tomar selfie] Recuerde agregar los permisos del GPS"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        tools:layout_editor_absoluteX="62dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
