@@ -20,6 +20,8 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
 import xyz.vmartinez.pasedelista.activities.MenuActivity
 import xyz.vmartinez.pasedelista.models.InicioDeSesionModel
+import xyz.vmartinez.pasedelista.models.TokenModel
+import xyz.vmartinez.pasedelista.services.ApiCallback
 import xyz.vmartinez.pasedelista.services.AsistenciaService
 //Agregar una cliente web en la consola de ggogle
 
@@ -30,8 +32,6 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var editTextCorreo: EditText
     lateinit var editTextContrasenia: EditText
-
-    lateinit var service: AsistenciaService
 
     private lateinit var credentialManager: CredentialManager
 
@@ -48,21 +48,27 @@ class MainActivity : AppCompatActivity() {
         editTextCorreo = findViewById<EditText>(R.id.editTextCorreo)
         editTextContrasenia = findViewById<EditText>(R.id.editTextContrasenia)
 
-        service = AsistenciaService()
         credentialManager = CredentialManager.create(this)
     }
 
     fun iniciarSesion(view: View){
         val correo = editTextCorreo.text.toString()
         val contrasenia = editTextContrasenia.text.toString()
-        val token = service.iniciarSesion(InicioDeSesionModel(correo, contrasenia))
-        if(token.token.isNullOrEmpty()){
-            Toast.makeText(this, "Datos incorrectos", Toast.LENGTH_LONG).show()
-        }else{
-            val intent = Intent(this, MenuActivity::class.java)
-            //Pasar los datos del usuario
-            startActivity(intent)
-        }
+        AsistenciaService.iniciarSesion(InicioDeSesionModel(correo, contrasenia), object : ApiCallback<TokenModel> {
+            override fun onSuccess(tokenModel: TokenModel) {
+                if(tokenModel.token.isNullOrEmpty())
+                    Toast.makeText(this@MainActivity,"Datos incorrectos", Toast.LENGTH_SHORT ).show()
+                else{
+                    Toast.makeText(this@MainActivity, tokenModel.token, Toast.LENGTH_SHORT).show()
+                    var intent = Intent(this@MainActivity, MenuActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+            override fun onError(error: String) {
+                Toast.makeText(this@MainActivity,"Datos incorrectos", Toast.LENGTH_SHORT ).show()
+            }
+        })
     }
 
     fun iniciarSesionConGoogle(view: View){

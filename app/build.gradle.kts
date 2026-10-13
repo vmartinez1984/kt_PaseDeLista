@@ -44,6 +44,12 @@ dependencies {
     implementation("androidx.credentials:credentials:1.7.0-alpha02")
     implementation("androidx.credentials:credentials-play-services-auth:1.7.0-alpha02")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
+    //Librerias de retrofit, para acceso a internet
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)

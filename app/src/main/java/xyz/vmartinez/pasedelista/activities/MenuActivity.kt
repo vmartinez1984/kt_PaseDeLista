@@ -19,6 +19,10 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import xyz.vmartinez.pasedelista.R
+import xyz.vmartinez.pasedelista.models.AsistenciaModel
+import xyz.vmartinez.pasedelista.models.RespuestaModel
+import xyz.vmartinez.pasedelista.services.ApiCallback
+import xyz.vmartinez.pasedelista.services.AsistenciaService
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,14 +41,14 @@ class MenuActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     //Para la foto
+    var selfie: File? = null
     var uri : Uri?  = null;
     private val tomarFotoLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicture()
-    ){
-            isSuccess ->
+    ){ isSuccess ->
         if(isSuccess){
             uri?.let{
-                    uri -> imageView.setImageURI(uri)
+                uri -> imageView.setImageURI(uri)
             }
         }else{
             Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show()
@@ -89,10 +93,10 @@ class MenuActivity : AppCompatActivity() {
 
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             location?.let {
-                val lat = it.latitude
-                val lon = it.longitude
-                textView.text =  "Latitud: $lat, Longitud: $lon"
-                gps = "Latitud: $lat, Longitud: $lon"
+                val latitud = it.latitude
+                val longitud = it.longitude
+                textView.text =  "Latitud: $latitud, Longitud: $longitud"
+                gps = "$latitud, $longitud"
             }
         }
     }
@@ -115,6 +119,7 @@ class MenuActivity : AppCompatActivity() {
 
     fun tomarSelfie(view: View){
         val archivo = crearArchivo()
+        selfie = archivo
 
         archivo?.let { file ->
             var uri = FileProvider.getUriForFile(this,
@@ -130,6 +135,16 @@ class MenuActivity : AppCompatActivity() {
     //Fin de foto
 
     fun registrarAsistencia(view: View){
+        val asistencia = AsistenciaModel(gps, selfie as File)
+        AsistenciaService.registrarAsistencia(asistencia, object : ApiCallback<RespuestaModel> {
+            override fun onSuccess(respuesta: RespuestaModel) {
+                Toast.makeText(this@MenuActivity, respuesta.mensaje, Toast.LENGTH_SHORT ).show()
+            }
+
+            override fun onError(error: String) {
+
+            }
+        })
         Toast.makeText(this, "Asistencia registra", Toast.LENGTH_SHORT).show()
     }
 }
